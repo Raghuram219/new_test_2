@@ -14,42 +14,31 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      # - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 662905738256.dkr.ecr.ap-south-1.amazonaws.com
 
-      # - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY
-      # - REPOSITORY_URI = 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myapp
       - REPOSITORY_URI=662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1
 
   build:
     commands:
       - echo Building Docker image...
-      # - docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-      # - docker build -t kube:latest .
       - docker build -t kube:v1 ./TestProject1
-      # - docker tag $ECR_REPOSITORY:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
       - docker tag kube:v1 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+
+  post_build:
+    commands:
+      - echo Pushing Docker image...
+      - docker push 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+
+      # Optional EKS deployment
+      # - echo Updating kubeconfig...
+      # - aws eks update-kubeconfig --region ap-south-1 --name dev-cluster
+
+      # - echo Deploying to EKS...
+      # - kubectl set image deployment/myapp \
+      #     myapp=662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+
+      # - kubectl rollout status deployment/myapp
+
 artifacts:
   files:
     - '**/*'
-
-
-post_build:
-  commands:
-    - echo Pushing Docker image...
-    # - docker push $REPOSITORY_URI:$IMAGE_TAG
-    - docker push 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
-
-    # - echo Updating kubeconfig...
-    # # - aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-    # - aws eks update-kubeconfig --region ap-south-1 --name dev-cluster
-
-    # - echo Deploying to EKS...
-    # # - kubectl set image deployment/$DEPLOYMENT_NAME \
-    # #   $DEPLOYMENT_NAME=$REPOSITORY_URI:$IMAGE_TAG
-    # - kubectl set image deployment/myapp \
-    #     myapp=662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
-
-    # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
-    # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
-    # - kubectl rollout status deployment/myapp
