@@ -34,22 +34,22 @@ artifacts:
     - '**/*'
 
 
-  post_build:
-    commands:
-      - echo Pushing Docker image...
-      # - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - docker push 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+post_build:
+  commands:
+    - echo Pushing Docker image...
+    # - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - docker push 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
 
-      # - echo Updating kubeconfig...
-      # # - aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-      # - aws eks update-kubeconfig --region ap-south-1 --name dev-cluster
+    # - echo Updating kubeconfig...
+    # # - aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+    # - aws eks update-kubeconfig --region ap-south-1 --name dev-cluster
 
-      # - echo Deploying to EKS...
-      # # - kubectl set image deployment/$DEPLOYMENT_NAME \
-      # #   $DEPLOYMENT_NAME=$REPOSITORY_URI:$IMAGE_TAG
-      # - kubectl set image deployment/myapp \
-      #     myapp=662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+    # - echo Deploying to EKS...
+    # # - kubectl set image deployment/$DEPLOYMENT_NAME \
+    # #   $DEPLOYMENT_NAME=$REPOSITORY_URI:$IMAGE_TAG
+    # - kubectl set image deployment/myapp \
+    #     myapp=662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
 
-      # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
-      # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
-      # - kubectl rollout status deployment/myapp
+    # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
+    # # - kubectl rollout status deployment/$DEPLOYMENT_NAME
+    # - kubectl rollout status deployment/myapp
