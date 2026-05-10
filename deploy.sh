@@ -25,9 +25,13 @@ echo "Pulling latest image..."
 docker pull $IMAGE
 
 echo "Running new container..."
+# docker run -d \
+#   --name $APP_NAME \
+#   -p 80:8000 \
+#   $IMAGE
 docker run -d \
   --name $APP_NAME \
-  -p 80:8000 \
+  -p 8000:8000 \
+  -e AWS_REGION=$AWS_REGION \
   $IMAGE
-
 echo "Deployment completed successfully"

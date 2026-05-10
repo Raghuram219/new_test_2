@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 load_dotenv()
 
 # Environment Type
-ENV_TYPE = os.getenv("ENV_TYPE", "nonlocal")
+ENV_TYPE =  "nonlocal"
 
 
 class Config:
@@ -20,11 +20,11 @@ class Config:
     """
 
     # Default values from .env
-    NAME = os.getenv("NAME")
-    USER = os.getenv("USER")
-    PASSWORD = os.getenv("PASSWORD")
-    HOST = os.getenv("HOST")
-    PORT = os.getenv("PORT")
+    # NAME = os.getenv("NAME")
+    # USER = os.getenv("USER")
+    # PASSWORD = os.getenv("PASSWORD")
+    # HOST = os.getenv("HOST")
+    # PORT = os.getenv("PORT")
 
     # Local Development
     if ENV_TYPE == "local":
@@ -39,12 +39,15 @@ class Config:
 
         print(f"Running in {ENV_TYPE.upper()} environment")
 
-        SECRET_NAME = os.getenv("AWS_SECRET_NAME","dev/Test/env")
-        AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+        SECRET_NAME = "dev/Test/env"
+        AWS_REGION = "us-east-1"
+        # SECRET_NAME = os.getenv("AWS_SECRET_NAME","dev/Test/env")
+        # AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
         try:
-            session = boto3.session.Session()
 
+            session = boto3.session.Session()
+            
             client = session.client(
                 service_name="secretsmanager",
                 region_name=AWS_REGION
