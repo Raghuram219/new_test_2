@@ -8,5 +8,6 @@ class EducationSerializer(serializers.ModelSerializer):
         model = Education
         fields = ('name', 'class_no')
 
+
     def get_class_no(self, obj):
         return "Test extra"
