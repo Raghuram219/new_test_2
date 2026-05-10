@@ -1,0 +1,114 @@
+python -m venv testenv
+pip install django
+django-admin startproject TestProject1
+python manage.py startapp app1
+pip install djangorestframework
+pip install python-decouple
+from decouple import Config
+--> No quotes in env file
+host = Config('HOST')
+from rest_framework.routers import DefaultRouter
+from django.contrib.auth.models import AbstractUser
+--> User table should be created on the empty db. If other table created auth_user gets created         
+AUTH_USER_MODEL = 'app1.MyUser' 
+
+
+-------
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Raghuram219/awseks.git
+git push -u origin main
+---------------
+
+docker login
+--> code & link for authentication
+
+docker tag kube:latest raghuram219/aws-test:v1
+docker push raghuram219/aws-test:v1
+-----------
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 662905738256.dkr.ecr.ap-south-1.amazonaws.com
+docker tag <local-image>:<tag> <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repo-name>:<tag>
+docker tag kube:latest 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+docker push 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+
+
+sudo apt install -y curl unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+
+awsconfigure
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 662905738256.dkr.ecr.ap-south-1.amazonaws.com
+
+docker pull 662905738256.dkr.ecr.ap-south-1.amazonaws.com/myecr1:v1
+
+---------------
+Launch ec2(connect commands are there on ec2)
+chmod 400 "AWSkeypair.pem"
+ssh -i "AWSkeypair.pem" ubuntu@ec2-15-206-81-219.ap-south-1.compute.amazonaws.com
+
+sudo su
+sudo apt update
+sudo install docker.io
+will be running if not
+sudo systemctl start docker
+sudo systemctl enable docker
+docker pull raghuram219/aws-test:v1
+
+
+----------------------
+
+# 4. Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+# 5. Install eksctl
+curl -s --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz
+sudo mv eksctl /usr/local/bin/
+eksctl version
+
+
+eksctl create cluster \
+  --name dev-cluster \
+  --region ap-south-1 \
+  --version 1.30 \
+  --nodegroup-name standard-workers \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 1 \
+  --nodes-max 3 \
+  --managed
+
+-->connect kubectl to cluster
+aws eks update-kubeconfig --region ap-south-1 --name dev-cluster
+
+kubectl get configmap aws-auth -n kube-system -o yaml > aws-auth.yaml
+
+mapRoles: |
+  - rolearn: arn:aws:iam::662905738256:role/codebuild-buildproj1-service-role
+    username: codebuild
+    groups:
+      - system:masters
+kubectl apply -f aws-auth.yaml
+------------------------
+AmazonEC2ContainerRegistryFullAccess
+AmazonEKSClusterPolicy
+
+
+
+
+-------------
+For EC2
+Code depoloy role create and add in frontend
+and some in backend
+Install CodeDeploy Agent on EC2
+CodeDeployServiceRole
+Attach EC2 IAM Role
