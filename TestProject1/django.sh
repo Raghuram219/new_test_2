@@ -2,12 +2,14 @@
 
 # echo "Create Migrations"
 # echo "-------------------"
-python manage.py makemigrations
+# python manage.py makemigrations
 # echo "-------------------"
 
 # echo "Migrate"
 # echo "-------------------"
-python manage.py migrate
+# python manage.py migrate
+python TestProject1/manage.py makemigrations
+python TestProject1/manage.py migrate
 # echo "-------------------"
 
 # echo "Start Django Server"
